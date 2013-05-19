@@ -1,0 +1,45 @@
+How to run the client:
+======================
+
+Execute ./bagger_distribution/bagger.sh
+
+
+
+How To Compile the package:
+===========================
+
+1. Install maven comprehension tool
+
+2. Bagger needs some java libraries installed locally in maven repository, 
+  I put the needed jar in the libs directory, the shell script should work
+
+  $ cd libs
+  $ ./install_local_maven.sh
+
+3. Compile everything
+
+  $ cd ../bagger-maven
+  $ mvn clean install
+  
+4. Finalize the installation
+
+  $ cd ../bagger_distribution
+  $ cp ../bagger-package/target/bagger-package-2.1.3-SNAPSHOT.jar bagger-2.1.3.jar
+
+5. To launch the client execute bagger.sh in bagger_distribution :
+ 
+  $ ./bagger.sh
+ 
+
+How to use the client:
+======================
+
+1. Create a new submission (a bag)
+2. Add files or directory to the bag in the Objects tree view (with the + on the right or with drag and drop)
+3. Save submission as a serialized zip file. The tag manifest and the payload manifests are used for the bag and generated when the bag is saved.
+4. Send the submission, hopefully you should have a list of collection ids to choose from if the url "http://localhost:8080/api/deposit/sd" returns the correct xml file.
+
+notes : I'm using the url "http://localhost:8080/api/deposit/col/" + coll_id to upload the zip file wit ha POST request.
+
+
+ 
