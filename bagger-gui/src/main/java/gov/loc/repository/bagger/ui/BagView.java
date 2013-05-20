@@ -245,6 +245,10 @@ public class BagView extends AbstractView implements ApplicationListener {
     	JPanel bagViewPanel = new JPanel(new BorderLayout(2, 2));
         bagViewPanel.setBackground(bgColor);
     	bagViewPanel.add(mainPanel, BorderLayout.CENTER);
+    	
+
+		startNewBagHandler.newBag();
+    	
         return bagViewPanel;
     }
     
@@ -257,7 +261,7 @@ public class BagView extends AbstractView implements ApplicationListener {
     	saveBagAsHandler = new SaveBagAsHandler(this);
     	completeBagHandler = new CompleteBagHandler(this);
     	validateBagHandler = new ValidateBagHandler(this);
-    	clearBagHandler = new ClearBagHandler(this);
+    	clearBagHandler = new ClearBagHandler(this);    	
         return buttonPanel;
     }
     
@@ -639,7 +643,7 @@ public class BagView extends AbstractView implements ApplicationListener {
     public void updateAddData() {
     	saveBagAsExecutor.setEnabled(true);
     	//saveBagExecutor.setEnabled(true);
-    	//sendSIPExecutor.setEnabled(true);
+    	sendSIPExecutor.setEnabled(true);
     	bagButtonPanel.invalidate();
     	topButtonPanel.invalidate();
     }

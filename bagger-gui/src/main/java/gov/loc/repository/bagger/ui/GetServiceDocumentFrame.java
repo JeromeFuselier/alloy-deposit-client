@@ -15,7 +15,13 @@
  */
 package gov.loc.repository.bagger.ui;
 
+import gov.loc.repository.bagger.bag.impl.DefaultBag;
 import gov.loc.repository.bagger.ui.util.ApplicationContextUtil;
+import gov.loc.repository.bagit.BagFactory;
+import gov.loc.repository.bagit.writer.Writer;
+import gov.loc.repository.bagit.writer.impl.FileSystemWriter;
+import gov.loc.repository.bagit.writer.impl.ZipWriter;
+import gov.loc.repository.bagger.ui.Progress;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -36,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import org.apache.commons.logging.Log;
@@ -73,6 +80,7 @@ public class GetServiceDocumentFrame extends JFrame implements ActionListener {
 	JCheckBox isTagCheckbox;
 	JCheckBox isPayloadCheckbox;
     JComboBox collectionList;
+	private String messages;
     
     ArrayList<String> documents = null;
 
@@ -208,10 +216,29 @@ public class GetServiceDocumentFrame extends JFrame implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			String coll_id = (String)collectionList.getSelectedItem();
-			String result = SwordClient.sendBag(coll_id, bagView.getBagRootPath());
-			setVisible(false);
 			
+			// Create a temporary file
+			if (bagView.getBagRootPath() == null) {
+				File tmpRootPath = new File("/home/jerome/test1.zip");
+				bagView.setBagRootPath(tmpRootPath);
+	        	
+	        	DefaultBag bag = bagView.getBag();
+	            bag.setRootDir(tmpRootPath);
+	                		
+	    		Writer bagWriter = null;      
+				BagFactory bagFactory = new BagFactory();
+				bagWriter = new ZipWriter(bagFactory);
+				bag.write(bagWriter);
+				
+	            
+	            
+			} 
+
+			String result = SwordClient.sendBag(coll_id, bagView.getBagRootPath());				
 			ApplicationContextUtil.addConsoleMessage(result);
+			
+
+			setVisible(false);
 			
         }
     }
@@ -239,4 +266,6 @@ public class GetServiceDocumentFrame extends JFrame implements ActionListener {
     private String getMessage(String property) {
     	return bagView.getPropertyMessage(property);
     }
+
+
 }

@@ -1,5 +1,8 @@
 package uk.ac.liv.alloy;
 
+import gov.loc.repository.bagger.BaggerApplication;
+import gov.loc.repository.bagger.ui.ConsoleView;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -16,7 +19,7 @@ import java.util.ArrayList;
 public class SwordClient {
 
 	public static ArrayList<String> getServiceDocument() {
-		String request = "http://localhost:8080/api/deposit/sd";
+		String request = BaggerApplication.server_url + "/api/deposit/sd";
 		String username = "sword";
 		String password = "sword";
 		String result = "<?xml version=\"1.0\" ?>";
@@ -29,8 +32,8 @@ public class SwordClient {
 		      
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestProperty ("Authorization", userNamePasswordBase64(username, password));
-			conn.setRequestMethod("GET"); 
 			conn.setRequestProperty("On-Behalf-Of", "obo");
+			conn.setRequestMethod("GET"); 
 			
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			while ((line = rd.readLine()) != null) {
@@ -113,7 +116,7 @@ public class SwordClient {
 
 
 	public static String sendBag(String coll_id, File file) {
-		String request = "http://localhost:8080/api/deposit/col/" + coll_id;
+		String request = BaggerApplication.server_url + "/api/deposit/col/" + coll_id;
 		String username = "sword";
 		String password = "sword";
 		URL url;
@@ -131,6 +134,8 @@ public class SwordClient {
 			conn.setRequestProperty("Content-Type", "application/zip"); 
 			conn.setRequestProperty("Content-Disposition", "test.zip");
 			conn.setRequestProperty("On-Behalf-Of", "obo");
+			conn.setRequestProperty("Packaging", "http://purl.org/net/sword/package/BagIt");
+			
 			conn.setUseCaches (false);		
 		
 			byte[] result = new byte[(int)file.length()];		
@@ -154,13 +159,16 @@ public class SwordClient {
 			wr.flush();
 			wr.close();
 			
-			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String line;
-			while ((line = rd.readLine()) != null) {
-				response += line;
+			try {
+				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				String line;
+				while ((line = rd.readLine()) != null) {
+					response += line;
+				}
+				wr.close();
+				rd.close();
+			} catch (FileNotFoundException e) {
 			}
-			wr.close();
-			rd.close();	
 				
 				
 			conn.disconnect();

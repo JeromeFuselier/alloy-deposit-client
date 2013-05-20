@@ -23,6 +23,8 @@ public class XmlParse {
         
         ArrayList<String> res = new ArrayList<String>();
         
+        res.add("default");
+        
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 	        dom = db.parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));

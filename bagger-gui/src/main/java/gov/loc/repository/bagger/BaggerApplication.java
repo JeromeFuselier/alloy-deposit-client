@@ -26,8 +26,16 @@ import org.apache.commons.logging.LogFactory;
  * Main driver that starts the Bagger spring rich client application.
  */
 public class BaggerApplication {
+	
+	public static String server_url = "http://localhost:8080";
+	
 
     public static void main(String[] args) {
+    	
+    	if (args.length >= 1) {
+    		server_url = args[0];
+    	}
+    	
         String rootContextDirectoryClassPath = "/gov/loc/repository/bagger/ctx";
 
         String startupContextPath = rootContextDirectoryClassPath + "/common/richclient-startup-context.xml";
