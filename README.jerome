@@ -34,12 +34,13 @@ How To Compile the package:
 How to use the client:
 ======================
 
-1. Create a new submission (a bag)
+0. Modify bagger.sh to point to the right server url.
+1. A new submission is created automatically at startup
 2. Add files or directory to the bag in the Objects tree view (with the + on the right or with drag and drop)
-3. Save submission as a serialized zip file. The tag manifest and the payload manifests are used for the bag and generated when the bag is saved.
-4. Send the submission, hopefully you should have a list of collection ids to choose from if the url "http://localhost:8080/api/deposit/sd" returns the correct xml file.
+3. (optional) Save submission as a serialized zip file. The tag manifest and the payload manifests are used for the bag and generated when the bag is saved.
+4. Send the submission, hopefully you should have a list of collection ids to choose from.
 
-notes : I'm using the url "http://localhost:8080/api/deposit/col/" + coll_id to upload the zip file wit ha POST request.
+
 
 
  

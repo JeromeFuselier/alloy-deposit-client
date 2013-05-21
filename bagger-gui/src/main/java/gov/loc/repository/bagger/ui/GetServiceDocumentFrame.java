@@ -29,6 +29,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -216,19 +217,28 @@ public class GetServiceDocumentFrame extends JFrame implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			String coll_id = (String)collectionList.getSelectedItem();
+			boolean temp_file = false;
+			File tmpRootPath = null;
 			
 			// Create a temporary file
 			if (bagView.getBagRootPath() == null) {
-				File tmpRootPath = new File("/home/jerome/test1.zip");
-				bagView.setBagRootPath(tmpRootPath);
-	        	
-	        	DefaultBag bag = bagView.getBag();
-	            bag.setRootDir(tmpRootPath);
-	                		
-	    		Writer bagWriter = null;      
-				BagFactory bagFactory = new BagFactory();
-				bagWriter = new ZipWriter(bagFactory);
-				bag.write(bagWriter);
+				temp_file = true;
+				try {
+					tmpRootPath = File.createTempFile("temp-file-name", ".zip");
+	
+					bagView.setBagRootPath(tmpRootPath);
+		        	
+		        	DefaultBag bag = bagView.getBag();
+		            bag.setRootDir(tmpRootPath);
+		                		
+		    		Writer bagWriter = null;      
+					BagFactory bagFactory = new BagFactory();
+					bagWriter = new ZipWriter(bagFactory);
+					bag.write(bagWriter);
+
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} 
 				
 	            
 	            
@@ -236,6 +246,12 @@ public class GetServiceDocumentFrame extends JFrame implements ActionListener {
 
 			String result = SwordClient.sendBag(coll_id, bagView.getBagRootPath());				
 			ApplicationContextUtil.addConsoleMessage(result);
+			
+			if (temp_file) {
+				if (tmpRootPath != null)
+					tmpRootPath.delete();
+				bagView.setBagRootPath(null);
+			}
 			
 
 			setVisible(false);

@@ -117,7 +117,8 @@ public class ConsolePane extends JPanel {
     }
     
     public boolean requestFocusInWindow() {
-        return this.requestFocusInWindow();
+    	//return this.requestFocusInWindow();
+    	return false;
     }
 
     public void addConsoleMessages(String message) {

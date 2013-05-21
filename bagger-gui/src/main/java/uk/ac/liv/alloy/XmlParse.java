@@ -41,7 +41,8 @@ public class XmlParse {
             		
             		if (child.getNodeName() == "atom:title") {
             			String document_id = child.getTextContent().replace("Collection ", "");
-            			res.add(document_id);
+            			if (!document_id.equals("default"))
+            				res.add(document_id);
             		}
             		
             	}
