@@ -19,6 +19,8 @@ import gov.loc.repository.bagger.ui.handlers.CreateBagInPlaceHandler;
 import gov.loc.repository.bagger.ui.handlers.GetServiceDocumentExecutor;
 import gov.loc.repository.bagger.ui.handlers.OpenBagHandler;
 import gov.loc.repository.bagger.ui.handlers.OpenExecutor;
+import gov.loc.repository.bagger.ui.handlers.OptCredentialsExecutor;
+import gov.loc.repository.bagger.ui.handlers.OptUrlExecutor;
 import gov.loc.repository.bagger.ui.handlers.RemoveDataHandler;
 import gov.loc.repository.bagger.ui.handlers.RemoveTagFileHandler;
 import gov.loc.repository.bagger.ui.handlers.SaveBagAsExecutor;
@@ -139,6 +141,8 @@ public class BagView extends AbstractView implements ApplicationListener {
     
 	public SendSIPExecutor sendSIPExecutor = new SendSIPExecutor(this);
 	public GetServiceDocumentExecutor getServiceDocumentExecutor = new GetServiceDocumentExecutor(this);
+	public OptUrlExecutor optUrlExecutor = new OptUrlExecutor(this);
+	public OptCredentialsExecutor optCredentialsExecutor = new OptCredentialsExecutor(this);
 
 	private JLabel addDataToolBarAction;
 	private JLabel removeDataToolBarAction;
@@ -670,6 +674,9 @@ public class BagView extends AbstractView implements ApplicationListener {
     	context.register("saveBagAsCommand", saveBagAsExecutor);
     	context.register("sendSIPCommand", sendSIPExecutor);
     	context.register("getServiceDocumentCommand", getServiceDocumentExecutor);
+    	context.register("optionUrlCommand", optUrlExecutor);
+    	context.register("optionCredentialCommand", optCredentialsExecutor);
+    	
     }
 
     public void onApplicationEvent(ApplicationEvent e) {

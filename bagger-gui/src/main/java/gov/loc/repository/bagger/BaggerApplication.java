@@ -22,18 +22,18 @@ import org.springframework.beans.PropertyAccessException;
 import org.springframework.richclient.application.ApplicationLauncher;
 import org.apache.commons.logging.LogFactory;
 
+import uk.ac.liv.alloy.SwordClient;
+
 /**
  * Main driver that starts the Bagger spring rich client application.
  */
 public class BaggerApplication {
 	
-	public static String server_url = "http://localhost:8080";
-	
 
     public static void main(String[] args) {
     	
     	if (args.length >= 1) {
-    		server_url = args[0];
+    		SwordClient.server_url = args[0];
     	}
     	
         String rootContextDirectoryClassPath = "/gov/loc/repository/bagger/ctx";

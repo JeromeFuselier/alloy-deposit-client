@@ -1,6 +1,7 @@
 package uk.ac.liv.alloy;
 
 import gov.loc.repository.bagger.BaggerApplication;
+import gov.loc.repository.bagger.ui.BagView;
 import gov.loc.repository.bagger.ui.ConsoleView;
 
 import java.io.BufferedInputStream;
@@ -14,14 +15,25 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class SwordClient {
+	
+
+	public static String server_url = "http://localhost:8080";
+	//public static String username = "sword";
+	//public static String password = "sword";
+	//public static String obo = "obo";
+	
+	public static String username = "alloy-deposit-client";
+	public static String password = "client-deposit-alloy";
+	public static String obo = System.getProperty("user.name");  
+	
+	
 
 	public static ArrayList<String> getServiceDocument() {
-		String request = BaggerApplication.server_url + "/api/deposit/sd";
-		String username = "sword";
-		String password = "sword";
+		String request = server_url + "/api/deposit/sd";
 		String result = "<?xml version=\"1.0\" ?>";
 		
 		try {
@@ -32,8 +44,8 @@ public class SwordClient {
 		      
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestProperty ("Authorization", userNamePasswordBase64(username, password));
-			conn.setRequestProperty("On-Behalf-Of", "obo");
-			conn.setRequestMethod("GET"); 
+			conn.setRequestProperty("On-Behalf-Of", obo);
+			conn.setRequestMethod("GET"); 		
 			
 			rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			while ((line = rd.readLine()) != null) {
@@ -41,8 +53,20 @@ public class SwordClient {
 			}
 			rd.close();
 			conn.disconnect(); 
+
+		} catch (UnknownHostException e) {	
+			BagView.instance.showWarningErrorDialog("HTTP Error", "The host is unknown:\n" + e.getMessage());		
 		} catch (IOException e) {
-			e.printStackTrace();
+			String message = e.getMessage();
+			if (e.getMessage().contains("403"))
+				message = "Server returned HTTP response code 403 - Forbidden\n Check the On-Behalf-Of: "+ obo + " header.";
+			else if (e.getMessage().contains("401"))
+				message = "Server returned HTTP response code 401 - Unauthorized\n The user "+ username + " wasn't authorized to connect";			
+			BagView.instance.showWarningErrorDialog("HTTP Error", message);
+			return new ArrayList<String>();
+		} catch (Exception e) {
+			BagView.instance.showWarningErrorDialog("HTTP Error", e.getMessage());
+			return new ArrayList<String>();
 		}
 		
 		return XmlParse.parseSD(result);
@@ -116,9 +140,7 @@ public class SwordClient {
 
 
 	public static String sendBag(String coll_id, File file) {
-		String request = BaggerApplication.server_url + "/api/deposit/col/" + coll_id;
-		String username = "sword";
-		String password = "sword";
+		String request = server_url + "/api/deposit/col/" + coll_id;
 		URL url;
 		String response = "";
 		
@@ -133,7 +155,7 @@ public class SwordClient {
 			conn.setRequestMethod("POST"); 
 			conn.setRequestProperty("Content-Type", "application/zip"); 
 			conn.setRequestProperty("Content-Disposition", "test.zip");
-			conn.setRequestProperty("On-Behalf-Of", "obo");
+			conn.setRequestProperty("On-Behalf-Of", obo);
 			conn.setRequestProperty("Packaging", "http://purl.org/net/sword/package/BagIt");
 			
 			conn.setUseCaches (false);		

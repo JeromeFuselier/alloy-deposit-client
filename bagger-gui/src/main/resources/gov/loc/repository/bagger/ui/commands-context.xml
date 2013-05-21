@@ -21,6 +21,8 @@
         <value>removeTagFileCommand</value>
         <value>sendSIPCommand</value>
         <value>getServiceDocumentCommand</value>
+        <value>optionUrlCommand</value>
+        <value>optionCredentialCommand</value>
        </list>
     </property>
   </bean>
@@ -30,6 +32,7 @@
       <list>
         <ref bean="fileMenu" />
          <!-- <ref bean="windowMenu" />  -->
+         <ref bean="optionMenu" />
         <ref bean="helpMenu" />
       </list>
     </property>
@@ -109,10 +112,19 @@
 
   <bean id="logoutCommand" class="org.springframework.richclient.security.LogoutCommand" />
   
-   <bean id="windowMenu" class="org.springframework.richclient.command.CommandGroupFactoryBean">
+  <bean id="windowMenu" class="org.springframework.richclient.command.CommandGroupFactoryBean">
     <property name="members">
       <list>
         <bean class="org.springframework.richclient.command.support.ShowViewMenu" />
+      </list>
+    </property>
+  </bean>
+  
+  <bean id="optionMenu" class="org.springframework.richclient.command.CommandGroupFactoryBean">
+    <property name="members">
+      <list>
+        <value>optionUrlCommand</value>
+        <value>optionCredentialCommand</value>
       </list>
     </property>
   </bean>
