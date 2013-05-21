@@ -88,18 +88,20 @@ public class GetServiceDocumentFrame extends JFrame implements ActionListener {
 	public GetServiceDocumentFrame(BagView bagView, String title) {
         super(title);
 		documents = SwordClient.getServiceDocument();
-		this.bagView = bagView;
-		if (bagView != null) {
-	        getContentPane().removeAll();
-	        savePanel = createComponents();
-		} else {
-			savePanel = new JPanel();
+		if (documents.size() != 0) {
+			this.bagView = bagView;
+			if (bagView != null) {
+		        getContentPane().removeAll();
+		        savePanel = createComponents();
+			} else {
+				savePanel = new JPanel();
+			}
+			
+	        getContentPane().add(savePanel, BorderLayout.CENTER);
+	        //setPreferredSize(preferredDimension);
+	        this.setBounds(300,200, 600, 200);
+	        pack();
 		}
-		
-        getContentPane().add(savePanel, BorderLayout.CENTER);
-        //setPreferredSize(preferredDimension);
-        this.setBounds(300,200, 600, 200);
-        pack();
     }
 	
 	protected JComponent createButtonBar() {
@@ -255,6 +257,7 @@ public class GetServiceDocumentFrame extends JFrame implements ActionListener {
 			
 
 			setVisible(false);
+			bagView.showWarningErrorDialog("Send Submission", "Transfer Complete");
 			
         }
     }
